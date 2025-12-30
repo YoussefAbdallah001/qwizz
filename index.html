@@ -226,8 +226,36 @@ input{
 <script>
 // ========= VARIABLES =========
 let allQuestions = [
-    {q:"What is the main goal of software testing?", answers:["Fixing hardware","Ensuring the software works as expected","Increasing internet speed","Improving appearance"], correct:"Ensuring the software works as expected", type:"mcq"},
-    {q:"Defect Clustering means most defects occur in specific areas of software.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"What is the main goal of software testing?", answers:["Fixing hardware","Ensuring the software works as expected","Increasing internet speed","Improving appearance"], correct:"Ensuring the software works as expected", type:"mcq"},
+{q:"Verification means checking if the product meets the specified requirements.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Validation means checking if the software meets user needs.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Debugging is the process of fixing bugs found during testing.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Quality Assurance mainly focuses on preventing defects.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Which of the following refers to a human mistake during development?", answers:["Error","Failure","Defect","Crash"], correct:"Error", type:"mcq"},
+{q:"A Defect is:", answers:["A human mistake","A problem in the software code","A testing document","A user report"], correct:"A problem in the software code", type:"mcq"},
+{q:"Failure occurs when a defect appears while running the software.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Exhaustive testing is possible and always recommended.", answers:["True","False"], correct:"False", type:"tf"},
+{q:"Defect Clustering means most defects occur in specific areas of software.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Which testing principle states that fixing bugs early saves cost?", answers:["Pesticide Paradox","Early Testing","Defect Clustering","Absence of Errors"], correct:"Early Testing", type:"mcq"},
+{q:"Repeating the same test cases stops finding new bugs. This describes:", answers:["Defect Clustering","Exhaustive Testing","Pesticide Paradox","Regression Testing"], correct:"Pesticide Paradox", type:"mcq"},
+{q:"Which SDLC model is strictly sequential?", answers:["Agile","Iterative","Waterfall","Incremental"], correct:"Waterfall", type:"mcq"},
+{q:"The V-Model gives high importance to testing at every development phase.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Agile model is flexible and adaptive to changes.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Agile model works the same as Waterfall.", answers:["True","False"], correct:"False", type:"tf"},
+{q:"Which phase includes running test cases and reporting defects?", answers:["Planning","Test Execution","Design","Deployment"], correct:"Test Execution", type:"mcq"},
+{q:"Testware refers to all documents, scripts, and outputs produced during testing.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Which role designs test cases based on requirements?", answers:["Developer","Test Manager","Test Analyst","User"], correct:"Test Analyst", type:"mcq"},
+{q:"Which role is mainly responsible for executing test cases?", answers:["Developer","Test Engineer","Customer","Project Manager"], correct:"Test Engineer", type:"mcq"},
+{q:"Quality Assurance and Testing are exactly the same.", answers:["True","False"], correct:"False", type:"tf"},
+{q:"Root Cause is the main reason why an error happened.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Developers always must not test their own code.", answers:["True","False"], correct:"False", type:"tf"},
+{q:"Independence in testing means the tester is different from the developer.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Which model delivers software in usable parts?", answers:["Waterfall","Incremental","V-Model","Spiral"], correct:"Incremental", type:"mcq"},
+{q:"Which model repeats development cycles to improve software?", answers:["Iterative","Waterfall","V-Model","Agile"], correct:"Iterative", type:"mcq"},
+{q:"Testing only means running software to find bugs.", answers:["True","False"], correct:"False", type:"tf"},
+{q:"Failure means the system does not behave as expected when executed.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Testing helps ensure the software meets user and business expectations.", answers:["True","False"], correct:"True", type:"tf"},
+{q:"Test Execution happens after Planning and Designing test cases.", answers:["True","False"], correct:"True", type:"tf"}
 ];
 let questions=[], current=0, score=0, teamName="", userAnswers=[], isAnswering=false, startTime, endTime, bellAudio, timerInterval, timeLeft=30, currentFilter='none';
 
@@ -461,4 +489,5 @@ function showResults(filter){
 }
 </script>
 </body>
+
 </html>
