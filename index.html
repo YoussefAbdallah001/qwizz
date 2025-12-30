@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quiz Game</title>
+
+<style>
+body{
+    margin:0;
+    padding:0;
+    font-family: Arial, Helvetica, sans-serif;
+    color:white;
+    text-align:center;
+    background:linear-gradient(135deg,#1f0075,#3500a8,#4a00c9);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.container{
+    width:100%;
+    max-width:700px;
+    padding:20px;
+}
+
+/* Buttons */
+.btn{
+    background:#4b18ff;
+    border:none;
+    padding:15px;
+    margin:10px 0;
+    width:100%;
+    color:white;
+    font-size:20px;
+    border-radius:12px;
+    cursor:pointer;
+    transition:all 0.3s;
+}
+.btn:hover{opacity:0.9}
+.correct{background:#1b5e20 !important;}
+.wrong{background:#b71c1c !important;}
+
+.question-box{
+    background:#24008b;
+    padding:20px;
+    border-radius:15px;
+    margin-bottom:20px;
+    font-size:24px;
+}
+
+.hidden{display:none}
+
+input{
+    padding:12px;
+    width:85%;
+    border-radius:10px;
+    border:none;
+    font-size:18px;
+    text-align:center;
+    margin-bottom:15px;
+}
+
+.start-btn{
+    background:#ffcb00;
+    color:black;
+}
+
+/* Timer */
+#timer{
+    font-size:24px;
+    font-weight:bold;
+    background:#ff4081;
+    padding:10px 20px;
+    border-radius:50px;
+    display:inline-block;
+    margin-bottom:15px;
+    min-width:120px;
+}
+.timer-warning{background:#ff9800 !important;}
+.timer-danger{background:#f44336 !important;}
+
+/* Progress Bar */
+#progress{
+    margin-bottom:15px;
+    background:rgba(255,255,255,0.1);
+    border-radius:5px;
+    overflow:hidden;
+}
+#progressBar{
+    background:#4b18ff;
+    height:10px;
+    border-radius:5px;
+    width:0%;
+    transition:width 0.5s;
+}
+#progressText{
+    margin:5px 0;
+    font-size:16px;
+    opacity:0.8;
+}
+
+/* Question Counter */
+#questionCounter{
+    font-size:20px;
+    margin-bottom:15px;
+    background:rgba(255,255,255,0.1);
+    padding:10px;
+    border-radius:10px;
+    display:inline-block;
+}
+
+/* END ANIMATION */
+#end h1{
+    font-size:50px;
+    margin-bottom:20px;
+}
+#scoreResult{
+    margin:30px 0;
+    font-size:24px;
+    background:rgba(255,255,255,0.1);
+    padding:20px;
+    border-radius:15px;
+}
+
+/* Results buttons */
+.results-btn{
+    background:#9c27b0;
+    color:white;
+    border:none;
+    padding:10px 20px;
+    margin:5px;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:16px;
+}
+
+/* Detailed Results */
+.result-item{
+    text-align:left;
+    padding:15px;
+    margin:10px 0;
+    background:rgba(255,255,255,0.05);
+    border-radius:10px;
+    border-left:4px solid;
+}
+.result-correct{border-left-color:#4CAF50;}
+.result-wrong{border-left-color:#f44336;}
+
+/* No Results Message */
+.no-results-msg{
+    text-align:center;
+    padding:20px;
+    margin:20px 0;
+    background:rgba(255,255,255,0.1);
+    border-radius:10px;
+    font-size:18px;
+    color:#ffcc00;
+}
+
+/* Bell animation */
+.bell{
+    font-size:70px;
+    display:inline-block;
+    transform-origin: top center;
+    animation: swing 1s infinite alternate ease-in-out;
+}
+@keyframes swing{
+    0%{transform: rotate(-30deg);}
+    100%{transform: rotate(30deg);}
+}
+
+/* Mobile Responsive */
+@media (max-width: 600px) {
+    .question-box { font-size: 18px; padding: 15px; }
+    .btn { padding: 12px; font-size: 16px; }
+    #end h1 { font-size: 35px; }
+    .bell { font-size: 50px; }
+    #scoreResult { font-size: 18px; padding: 15px; }
+    .container { padding: 15px; }
+    #timer { font-size: 20px; padding: 8px 16px; min-width: 100px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<!-- START -->
+<div id="start">
+    <h1>Quiz Game 🎮</h1>
+    <input id="team" placeholder="Enter Team Name">
+    <button class="btn start-btn" onclick="startGame()">Start</button>
+</div>
+
+<!-- QUIZ -->
+<div id="quiz" class="hidden">
+    <div id="questionCounter">Question: <span id="currentQuestion">1</span>/<span id="totalQuestions">0</span></div>
+    <div id="timer">30s</div>
+    
+    <div id="progress">
+        <div id="progressBar"></div>
+        <p id="progressText">Questions</p>
+    </div>
+    
+    <div class="question-box" id="question"></div>
+    <div id="answers"></div>
+</div>
+
+<!-- END -->
+<div id="end" class="hidden">
+    <h1>THE END !</h1>
+    <div class="bell">🔔</div>
+    <div id="scoreResult"></div>
+    <div id="detailedResults" class="hidden"></div>
+    
+    <button class="results-btn" style="width: 75%; margin-top:5px; margin-bottom: 10px;" id="toggleBtn" onclick="toggleAllAnswers()">Show All Answers</button>
+    <div>
+        <button class="results-btn" onclick="showCorrectOnly()">Correct Only</button>
+        <button class="results-btn" onclick="showWrongOnly()">Wrong Only</button>
+    </div>
+</div>
+
+</div>
+
+<script>
+// ========= VARIABLES =========
+let allQuestions = [
+    {q:"What is the main goal of software testing?", answers:["Fixing hardware","Ensuring the software works as expected","Increasing internet speed","Improving appearance"], correct:"Ensuring the software works as expected", type:"mcq"},
+    {q:"Defect Clustering means most defects occur in specific areas of software.", answers:["True","False"], correct:"True", type:"tf"},
+];
+let questions=[], current=0, score=0, teamName="", userAnswers=[], isAnswering=false, startTime, endTime, bellAudio, timerInterval, timeLeft=30, currentFilter='none';
+
+// ========= INIT =========
+document.addEventListener('DOMContentLoaded', function() {
+    bellAudio = new Audio("https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3");
+    document.getElementById("team").addEventListener("keypress", function(e){
+        if(e.key === "Enter"){ startGame(); }
+    });
+});
+
+// ========= SHUFFLE =========
+function shuffleQuestions(){
+    let mcq = allQuestions.filter(q=>q.type==="mcq").sort(()=>Math.random()-0.5);
+    let tf = allQuestions.filter(q=>q.type==="tf").sort(()=>Math.random()-0.5);
+    questions=[];
+    let maxL = Math.max(mcq.length, tf.length);
+    for(let i=0;i<maxL;i++){
+        if(i<mcq.length){ questions.push({...mcq[i], answers:[...mcq[i].answers].sort(()=>Math.random()-0.5)}); }
+        if(i<tf.length){ questions.push(tf[i]); }
+    }
+    document.getElementById("totalQuestions").textContent = questions.length;
+}
+
+// ========= START =========
+function startGame(){
+    teamName=document.getElementById("team").value.trim();
+    if(!teamName){ alert("Please enter your team name first!"); return; }
+    shuffleQuestions(); current=0; score=0; userAnswers=[]; isAnswering=false; currentFilter='none'; startTime=new Date(); timeLeft=30;
+    document.getElementById("start").classList.add("hidden");
+    document.getElementById("quiz").classList.remove("hidden");
+    document.getElementById("end").classList.add("hidden");
+    document.getElementById("detailedResults").classList.add("hidden");
+    document.getElementById("toggleBtn").textContent="Show All Answers";
+    loadQuestion(); startTimer();
+}
+
+// ========= TIMER =========
+function startTimer(){ clearInterval(timerInterval); timeLeft=30; updateTimerDisplay();
+    timerInterval=setInterval(()=>{
+        timeLeft--; updateTimerDisplay();
+        if(timeLeft<=0){ clearInterval(timerInterval); timeUp(); }
+    },1000);
+}
+function updateTimerDisplay(){
+    let t=document.getElementById("timer"); t.textContent=timeLeft+"s";
+    t.classList.remove("timer-warning","timer-danger");
+    if(timeLeft<=10) t.classList.add("timer-danger");
+    else if(timeLeft<=15) t.classList.add("timer-warning");
+}
+function timeUp(){
+    if(isAnswering) return;
+    let q=questions[current];
+    userAnswers.push({question:q.q, chosen:"TIME UP", correct:q.correct, isCorrect:false, timeUp:true});
+    setTimeout(()=>{ current++; if(current<questions.length){ loadQuestion(); startTimer(); } else { finish(); } },2000);
+}
+
+// ========= LOAD QUESTION =========
+function loadQuestion(){
+    if(current>=questions.length){ finish(); return; }
+    let q=questions[current];
+    document.getElementById("question").textContent=q.q;
+    document.getElementById("currentQuestion").textContent=current+1;
+    document.getElementById("progressBar").style.width=((current+1)/questions.length)*100+"%";
+    let answersDiv=document.getElementById("answers"); answersDiv.innerHTML="";
+    let answersToShow=q.type==="tf"?q.answers:[...q.answers].sort(()=>Math.random()-0.5);
+    answersToShow.forEach(a=>{
+        let btn=document.createElement("button"); btn.className="btn"; btn.textContent=a; btn.onclick=()=>checkAnswer(a,btn);
+        answersDiv.appendChild(btn);
+    });
+    isAnswering=false;
+}
+
+// ========= CHECK ANSWER =========
+function checkAnswer(answer, btn){
+    if(isAnswering) return; isAnswering=true; clearInterval(timerInterval);
+    let q=questions[current]; let timeTaken=30-timeLeft;
+    userAnswers.push({question:q.q, chosen:answer, correct:q.correct, isCorrect:answer===q.correct, timeTaken:timeTaken});
+    if(answer===q.correct){ btn.classList.add("correct"); score++; }
+    else{
+        btn.classList.add("wrong");
+        document.querySelectorAll('#answers .btn').forEach(b=>{ if(b.textContent===q.correct) b.classList.add("correct"); });
+    }
+    setTimeout(()=>{ current++; if(current<questions.length){ loadQuestion(); startTimer(); } else { finish(); } },1500);
+}
+
+// ========= FINISH =========
+function finish(){
+    endTime=new Date();
+    let totalTime=Math.round((endTime-startTime)/1000);
+    let minutes=Math.floor(totalTime/60); let seconds=totalTime%60;
+    let wrongAnswers=questions.length-score;
+    document.getElementById("quiz").classList.add("hidden");
+    document.getElementById("end").classList.remove("hidden");
+    bellAudio.play().catch(e=>console.log(e));
+    let percentage=Math.round((score/questions.length)*100);
+    document.getElementById("scoreResult").innerHTML=
+        `<h2>Team: ${teamName}</h2>
+        <h3>Final Score: ${score} / ${questions.length}</h3>
+        <h3>Percentage: ${percentage}%</h3>
+        <p>Correct Answers: ${score}</p>
+        <p>Wrong Answers: ${wrongAnswers}</p>
+        <p>Total Time: ${minutes}m ${seconds}s</p>`;
+    sendFormspreeData(teamName, score, wrongAnswers, totalTime, percentage);
+}
+
+// ========= FORMSPREE =========
+function sendFormspreeData(teamName, score, wrongAnswers, totalTime, percentage){
+    if(navigator.onLine){
+        let formData=new FormData();
+        formData.append("team",teamName);
+        formData.append("score",score);
+        formData.append("wrong_answers",wrongAnswers);
+        formData.append("total_time",`${Math.floor(totalTime/60)}m ${totalTime%60}s`);
+        formData.append("percentage",percentage+"%");
+        formData.append("date",new Date().toLocaleString());
+        formData.append("Number of questions",`${questions.length}`);
+        fetch("https://formspree.io/f/xzznyrpv",{method:"POST",body:formData,headers:{'Accept':'application/json'}})
+        .then(r=>{ if(r.ok) console.log("Data submitted successfully"); })
+        .catch(e=>console.log("Formspree error:",e));
+    }
+}
+
+// ========= RESULTS =========
+function toggleAllAnswers(){
+    let div=document.getElementById("detailedResults"), btn=document.getElementById("toggleBtn");
+    if(div.classList.contains("hidden")){ 
+        showResults('all'); 
+        currentFilter='all'; 
+        btn.textContent="Hide All Answers"; 
+    } else { 
+        div.classList.add("hidden"); 
+        currentFilter='none'; 
+        btn.textContent="Show All Answers"; 
+    }
+}
+
+function showCorrectOnly(){ 
+    let div = document.getElementById("detailedResults");
+    let btn = document.getElementById("toggleBtn");
+    
+    // تغيير اسم الزر إلى Hide All Answers
+    btn.textContent = "Hide All Answers";
+    
+    // إظهار القسم
+    div.classList.remove("hidden");
+    
+    // التصفية للحصول على الإجابات الصحيحة فقط
+    let correctAnswers = userAnswers.filter(a => a.isCorrect && !a.timeUp);
+    
+    if (correctAnswers.length === 0) {
+        // إذا لم توجد إجابات صحيحة
+        div.innerHTML = `
+            <h3 style='text-align:center; margin-bottom:15px;'>Correct Answers</h3>
+            <div class="no-results-msg">
+                😊 You don't have any correct answers
+            </div>
+        `;
+    } else {
+        // عرض الإجابات الصحيحة
+        showResults('correct');
+    }
+    currentFilter = 'correct';
+}
+
+function showWrongOnly(){ 
+    let div = document.getElementById("detailedResults");
+    let btn = document.getElementById("toggleBtn");
+    
+    // تغيير اسم الزر إلى Hide All Answers
+    btn.textContent = "Hide All Answers";
+    
+    // إظهار القسم
+    div.classList.remove("hidden");
+    
+    // التصفية للحصول على الإجابات الخاطئة فقط
+    let wrongAnswers = userAnswers.filter(a => !a.isCorrect || a.timeUp);
+    
+    if (wrongAnswers.length === 0) {
+        // إذا لم توجد إجابات خاطئة
+        div.innerHTML = `
+            <h3 style='text-align:center; margin-bottom:15px;'>Wrong Answers</h3>
+            <div class="no-results-msg">
+                🎉 Perfect! You don't have any wrong answers
+            </div>
+        `;
+    } else {
+        // عرض الإجابات الخاطئة
+        showResults('wrong');
+    }
+    currentFilter = 'wrong';
+}
+
+function showResults(filter){
+    let div = document.getElementById("detailedResults"); 
+    div.classList.remove("hidden"); 
+    
+    let title = '';
+    switch(filter) {
+        case 'all': title = 'All Answers'; break;
+        case 'correct': title = 'Correct Answers'; break;
+        case 'wrong': title = 'Wrong Answers'; break;
+    }
+    
+    div.innerHTML = `<h3 style='text-align:center; margin-bottom:15px;'>${title}</h3>`;
+    
+    let filtered = userAnswers;
+    if(filter === 'correct') filtered = userAnswers.filter(a => a.isCorrect && !a.timeUp);
+    else if(filter === 'wrong') filtered = userAnswers.filter(a => !a.isCorrect || a.timeUp);
+    
+    if (filtered.length === 0) {
+        div.innerHTML += `<div class="no-results-msg">No results to display</div>`;
+        return;
+    }
+    
+    filtered.forEach((a,i) => {
+        let r = document.createElement("div"); 
+        r.className = "result-item " + (a.isCorrect ? "result-correct" : "result-wrong");
+        
+        let qText = a.question.length > 80 ? a.question.substring(0,80) + "..." : a.question;
+        let tInfo = a.timeTaken !== undefined ? ` (${a.timeTaken}s)` : (a.timeUp ? " (TIME UP)" : "");
+        
+        r.innerHTML = `
+            <strong>Q${i+1}:</strong> ${qText}<br>
+            <span style="color:${a.isCorrect?'#4CAF50':'#f44336'}">
+            ${a.timeUp?'⏰ ':''}${a.isCorrect?'✅':'❌'} Your Answer: <strong>${a.chosen}</strong>${tInfo}<br>
+            ${!a.isCorrect && !a.timeUp ? `Correct Answer: <strong>${a.correct}</strong><br>` : ''}
+            </span>`;
+        div.appendChild(r);
+    });
+}
+</script>
+</body>
+</html>
